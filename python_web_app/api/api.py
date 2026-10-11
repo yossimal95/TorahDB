@@ -23,7 +23,11 @@ def get_all_characters():
          FROM marriages mar
          JOIN characters spouse ON (mar.husband_id = c.character_id AND spouse.character_id = mar.wife_id) 
                                 OR (mar.wife_id = c.character_id AND spouse.character_id = mar.husband_id)
-        ) AS spouses
+        ) AS spouses,
+        (SELECT GROUP_CONCAT(CASE WHEN mar.husband_id = c.character_id THEN mar.wife_id ELSE mar.husband_id END, ',') 
+         FROM marriages mar
+         WHERE mar.husband_id = c.character_id OR mar.wife_id = c.character_id
+        ) AS spouse_ids
     FROM characters c
     LEFT JOIN characters f ON c.father_id = f.character_id
     LEFT JOIN characters m ON c.mother_id = m.character_id;
@@ -120,7 +124,16 @@ def update_character_details():
         return jsonify(result), 500
     return jsonify({"success": True, "rows_affected": result})
 
-# 6. sp_add_marriage
+# 6. sp_get_all_marriages
+@api_bp.route('/marriages', methods=['GET'])
+def get_all_marriages():
+    query = "SELECT marriage_id, husband_id, wife_id FROM marriages;"
+    result = DataAccess.execute_read(query)
+    if isinstance(result, dict) and "error" in result:
+        return jsonify(result), 500
+    return jsonify(result)
+
+# 7. sp_add_marriage
 @api_bp.route('/marriages/add', methods=['POST'])
 def add_marriage():
     data = request.json or {}

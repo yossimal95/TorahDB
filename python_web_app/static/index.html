@@ -353,6 +353,350 @@
             gap: 1rem;
             align-items: flex-end;
         }
+
+        .btn-tree {
+            background-color: var(--accent-2);
+        }
+
+        .btn-tree:hover {
+            background-color: #384732;
+        }
+
+        /* Family Tree Modal Styles */
+        .tree-modal-content {
+            width: 96vw;
+            max-width: 96vw;
+            height: 92vh;
+            max-height: 92vh;
+            display: flex;
+            flex-direction: column;
+            padding: 0;
+            overflow: hidden;
+            background-color: #f7f1e1;
+        }
+
+        .tree-header-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .tree-ctrl-btn {
+            background-color: #dfcdad;
+            border: 1px solid var(--border-dark);
+            color: var(--text-main);
+            padding: 0.4rem 0.8rem;
+            border-radius: 3px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .tree-ctrl-btn:hover {
+            background-color: #c9b48f;
+            transform: translateY(-1px);
+        }
+
+        .tree-viewport {
+            flex: 1;
+            overflow: auto;
+            position: relative;
+            background-color: #f5eedb;
+            background-image: 
+                radial-gradient(#c2b295 1px, transparent 1px),
+                radial-gradient(#c2b295 1px, #f5eedb 1px);
+            background-size: 32px 32px;
+            background-position: 0 0, 16px 16px;
+            cursor: grab;
+            user-select: none;
+            padding: 2.5rem 1.5rem;
+            direction: ltr; /* Stable viewport scrolling */
+        }
+
+        .tree-viewport.grabbing {
+            cursor: grabbing;
+        }
+
+        .tree-canvas {
+            direction: rtl; /* Proper Hebrew tree order */
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 100%;
+            transform-origin: top center;
+            transition: transform 0.15s ease-out;
+            padding-bottom: 5rem;
+        }
+
+        .tree-node {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        .node-union {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            background: rgba(232, 219, 196, 0.75);
+            padding: 0.5rem 0.8rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-light);
+            position: relative;
+            z-index: 2;
+            box-shadow: 1px 2px 6px rgba(0,0,0,0.06);
+            transition: all 0.2s;
+        }
+
+        .node-union:hover {
+            border-color: var(--border-dark);
+            background: rgba(232, 219, 196, 0.95);
+        }
+
+        .marriage-ring {
+            color: #b3822a;
+            font-size: 1.05rem;
+            padding: 0 0.35rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            filter: drop-shadow(0 1px 1px rgba(0,0,0,0.12));
+        }
+
+        .multi-spouses-badge {
+            font-size: 0.75rem;
+            background: #e4d7bf;
+            color: var(--text-muted);
+            border: 1px solid var(--border-light);
+            padding: 0.15rem 0.5rem;
+            border-radius: 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            font-weight: 600;
+        }
+
+        .marriage-branch-node {
+            padding-top: 1.5rem;
+        }
+
+        .marriage-spouse-union {
+            flex-direction: column;
+            align-items: center;
+            background: rgba(246, 239, 225, 0.95);
+            border: 1px solid #c2b295;
+            padding: 0.6rem 0.8rem;
+            gap: 0.4rem;
+        }
+
+        .marriage-branch-header {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--accent-1);
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.35rem;
+        }
+
+        .card-tag {
+            font-size: 0.75rem;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            margin-top: 0.25rem;
+            font-weight: 600;
+        }
+
+        .card-tag.mother-tag {
+            background-color: #f7e6ec;
+            color: #8f2b5c;
+            border: 1px solid #e2cad4;
+        }
+
+        .card-tag.father-tag {
+            background-color: #e6eef7;
+            color: #2b5c8f;
+            border: 1px solid #cad8e8;
+        }
+
+        .tree-card {
+            background-color: #fffdf5;
+            border: 2px solid var(--border-dark);
+            border-radius: 6px;
+            padding: 0.6rem 0.8rem;
+            min-width: 140px;
+            max-width: 175px;
+            cursor: pointer;
+            text-align: center;
+            box-shadow: 2px 3px 6px rgba(0,0,0,0.12);
+            position: relative;
+            transition: all 0.2s ease;
+        }
+
+        .tree-card:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 6px 14px rgba(124, 45, 35, 0.25);
+            border-color: var(--accent-1);
+        }
+
+        .tree-card.male {
+            border-top: 4px solid #2b5c8f;
+        }
+
+        .tree-card.female {
+            border-top: 4px solid #8f2b5c;
+        }
+
+        .tree-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 0.2rem;
+        }
+
+        .tree-card-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-main);
+            line-height: 1.2;
+            margin-bottom: 0.2rem;
+        }
+
+        .tree-card-en {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .tree-card-meta {
+            font-size: 0.8rem;
+            color: var(--accent-2);
+            font-weight: 600;
+            margin-top: 0.3rem;
+            background: #ede2cf;
+            border-radius: 3px;
+            padding: 0.1rem 0.35rem;
+            display: inline-block;
+        }
+
+        /* Branch Toggle Button */
+        .branch-toggle {
+            position: absolute;
+            bottom: -11px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--header-bg);
+            color: var(--header-text);
+            border: 1px solid var(--border-light);
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65rem;
+            cursor: pointer;
+            z-index: 5;
+            transition: all 0.2s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.25);
+        }
+
+        .branch-toggle:hover {
+            background: var(--accent-1);
+            transform: translateX(-50%) scale(1.15);
+        }
+
+        /* Connectors */
+        .tree-node-children {
+            display: flex;
+            justify-content: center;
+            position: relative;
+            padding-top: 2rem;
+            gap: 1.8rem;
+        }
+
+        /* Vertical connector from parent union down to branch bar */
+        .has-children > .node-union::after {
+            content: '';
+            position: absolute;
+            bottom: -2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 2rem;
+            background-color: var(--border-dark);
+            z-index: 1;
+        }
+
+        /* Vertical line from horizontal line down into each child */
+        .tree-node-children > .tree-node::before {
+            content: '';
+            position: absolute;
+            top: -2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 2rem;
+            background-color: var(--border-dark);
+            z-index: 1;
+        }
+
+        /* Horizontal branch line connecting sibling children */
+        .tree-node-children > .tree-node::after {
+            content: '';
+            position: absolute;
+            top: -2rem;
+            height: 2px;
+            background-color: var(--border-dark);
+            z-index: 1;
+        }
+
+        /* Sibling connector logic for RTL */
+        .tree-node-children > .tree-node:first-child::after {
+            left: 0;
+            width: 50%;
+        }
+
+        .tree-node-children > .tree-node:last-child::after {
+            right: 0;
+            left: 50%;
+            width: 50%;
+        }
+
+        .tree-node-children > .tree-node:not(:first-child):not(:last-child)::after {
+            left: 0;
+            right: 0;
+            width: 100%;
+        }
+
+        .tree-node-children > .tree-node:only-child::after {
+            display: none;
+        }
+
+        /* Collapsed State */
+        .tree-node.collapsed > .tree-node-children {
+            display: none !important;
+        }
+        .tree-node.collapsed.has-children > .node-union::after {
+            display: none !important;
+        }
+        .tree-node.collapsed > .node-union .branch-toggle i {
+            transform: rotate(180deg);
+        }
     </style>
 </head>
 <body>
@@ -360,9 +704,14 @@
     <div class="container">
         <header class="header">
             <h1>Torah DB</h1>
-            <button class="btn" onclick="openAddModal()">
-                <i class="fas fa-plus"></i> הוסף דמות
-            </button>
+            <div style="display: flex; gap: 0.8rem; align-items: center;">
+                <button class="btn btn-tree" onclick="openTreeModal()" title="צפייה בעץ יוחסין">
+                    <i class="fas fa-sitemap"></i> צפייה בעץ
+                </button>
+                <button class="btn" onclick="openAddModal()">
+                    <i class="fas fa-plus"></i> הוסף דמות
+                </button>
+            </div>
         </header>
 
         <div class="table-container">
@@ -571,6 +920,30 @@
         </div>
     </div>
 
+    <!-- Modal for Family Tree View -->
+    <div class="modal-overlay" id="treeModal">
+        <div class="modal-content tree-modal-content">
+            <div class="modal-header">
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <h2><i class="fas fa-sitemap" style="color: var(--accent-1); margin-left: 0.5rem;"></i> עץ יוחסין שושלתי</h2>
+                    <span id="treeStats" style="font-size: 0.95rem; color: var(--text-muted); background: #ecd9ba; padding: 0.25rem 0.7rem; border-radius: 12px; border: 1px solid var(--border-light);"></span>
+                </div>
+                <div class="tree-header-controls">
+                    <button class="tree-ctrl-btn" onclick="zoomTree(0.15)" title="הגדל"><i class="fas fa-search-plus"></i></button>
+                    <button class="tree-ctrl-btn" onclick="zoomTree(-0.15)" title="הקטן"><i class="fas fa-search-minus"></i></button>
+                    <button class="tree-ctrl-btn" id="treeZoomBadge" onclick="resetTreeZoom()" title="איפוס זום">100%</button>
+                    <button class="tree-ctrl-btn" id="toggleAllBtn" onclick="toggleAllBranches()" title="כווץ/הרחב הכל"><i class="fas fa-compress-alt"></i> כווץ/הרחב</button>
+                    <button class="close-btn" onclick="closeModal('treeModal')">&times;</button>
+                </div>
+            </div>
+            <div class="tree-viewport" id="treeViewport">
+                <div class="tree-canvas" id="treeCanvas">
+                    <!-- Tree rendered dynamically -->
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         let currentCharacterId = null;
         let allCharactersList = [];
@@ -629,6 +1002,12 @@
                 `;
                 tbody.appendChild(tr);
             });
+
+            // If tree modal is open, refresh it as well
+            const treeModal = document.getElementById('treeModal');
+            if (treeModal && treeModal.classList.contains('active')) {
+                renderFamilyTree();
+            }
         }
         
         // Helper to populate a select dropdown with characters (excluding the current one)
@@ -912,8 +1291,373 @@
             }
         }
 
+        // --- Family Tree View Logic ---
+        let currentTreeZoom = 1.0;
+        let allCollapsed = false;
+
+        function openTreeModal() {
+            renderFamilyTree();
+            openModal('treeModal');
+            // Auto-center viewport
+            setTimeout(() => {
+                const vp = document.getElementById('treeViewport');
+                const canvas = document.getElementById('treeCanvas');
+                if (vp && canvas) {
+                    vp.scrollLeft = Math.max(0, (canvas.scrollWidth - vp.clientWidth) / 2);
+                }
+            }, 60);
+        }
+
+        function zoomTree(delta) {
+            currentTreeZoom = Math.max(0.35, Math.min(1.8, currentTreeZoom + delta));
+            applyTreeZoom();
+        }
+
+        function resetTreeZoom() {
+            currentTreeZoom = 1.0;
+            applyTreeZoom();
+        }
+
+        function applyTreeZoom() {
+            const canvas = document.getElementById('treeCanvas');
+            const badge = document.getElementById('treeZoomBadge');
+            if (canvas) {
+                canvas.style.transform = `scale(${currentTreeZoom})`;
+            }
+            if (badge) {
+                badge.textContent = `${Math.round(currentTreeZoom * 100)}%`;
+            }
+        }
+
+        function toggleBranch(event, btn) {
+            event.stopPropagation();
+            const treeNode = btn.closest('.tree-node');
+            if (treeNode) {
+                treeNode.classList.toggle('collapsed');
+                const icon = btn.querySelector('i');
+                if (treeNode.classList.contains('collapsed')) {
+                    icon.className = 'fas fa-chevron-down';
+                } else {
+                    icon.className = 'fas fa-chevron-up';
+                }
+            }
+        }
+
+        function toggleAllBranches() {
+            allCollapsed = !allCollapsed;
+            const nodes = document.querySelectorAll('.tree-node.has-children');
+            nodes.forEach(node => {
+                const icon = node.querySelector(':scope > .node-union .branch-toggle i');
+                if (allCollapsed) {
+                    node.classList.add('collapsed');
+                    if (icon) icon.className = 'fas fa-chevron-down';
+                } else {
+                    node.classList.remove('collapsed');
+                    if (icon) icon.className = 'fas fa-chevron-up';
+                }
+            });
+            const toggleBtn = document.getElementById('toggleAllBtn');
+            if (toggleBtn) {
+                toggleBtn.innerHTML = allCollapsed 
+                    ? '<i class="fas fa-expand-alt"></i> הרחב הכל' 
+                    : '<i class="fas fa-compress-alt"></i> כווץ הכל';
+            }
+        }
+
+        function openDetailsModalFromTree(charId) {
+            const char = allCharactersList.find(c => c.character_id == charId);
+            if (char) {
+                openDetailsModal(char);
+            }
+        }
+
+        function renderCharCard(char, customTag = null) {
+            const isMale = char.gender === 1 || char.gender === '1';
+            const isFemale = char.gender === 0 || char.gender === '0';
+            const genderClass = isMale ? 'male' : (isFemale ? 'female' : 'unknown');
+            const genderIcon = isMale ? '<i class="fas fa-mars" style="color: #2b5c8f;"></i>' : (isFemale ? '<i class="fas fa-venus" style="color: #8f2b5c;"></i>' : '');
+            
+            let metaText = '';
+            if (char.age_at_death) {
+                metaText = `${char.age_at_death} שנה`;
+            } else {
+                metaText = `ID: ${char.character_id}`;
+            }
+
+            let tagsHtml = '';
+            if (customTag) {
+                tagsHtml = `<div class="card-tag father-tag">${customTag}</div>`;
+            } else if (char.mother_name) {
+                tagsHtml = `<div class="card-tag mother-tag"><i class="fas fa-female"></i> אם: ${char.mother_name}</div>`;
+            }
+
+            return `
+                <div class="tree-card ${genderClass}" onclick="openDetailsModalFromTree(${char.character_id})" title="לחץ לצפייה ועריכה מלאה">
+                    <div class="tree-card-header">
+                        <span>${genderIcon}</span>
+                        <span class="tree-card-meta">${metaText}</span>
+                    </div>
+                    <div class="tree-card-name">${char.main_name_he || 'ללא שם'}</div>
+                    <div class="tree-card-en">${char.main_name_en || ''}</div>
+                    ${tagsHtml}
+                </div>
+            `;
+        }
+
+        function renderTreeNode(primaryCharId, charMap, visited) {
+            if (visited.has(primaryCharId)) return '';
+            visited.add(primaryCharId);
+
+            const primaryChar = charMap.get(primaryCharId);
+            if (!primaryChar) return '';
+
+            // Spouses to display in this family node
+            const spouses = primaryChar.spousesList
+                .map(id => charMap.get(id))
+                .filter(s => s && !visited.has(s.character_id));
+
+            // MULTIPLE SPOUSES CASE (e.g. Lamech with Adah and Zillah)
+            if (spouses.length > 1) {
+                let html = `<div class="tree-node has-children" data-id="${primaryChar.character_id}">`;
+                
+                // Father card at top
+                html += `<div class="node-union">`;
+                html += renderCharCard(primaryChar);
+                html += `<div class="multi-spouses-badge"><i class="fas fa-ring"></i> ${spouses.length} נשים</div>`;
+                html += `<button class="branch-toggle" onclick="toggleBranch(event, this)" title="כווץ/הרחב ענף"><i class="fas fa-chevron-up"></i></button>`;
+                html += `</div>`; // end node-union
+
+                // Marriage sub-branches
+                html += `<div class="tree-node-children">`;
+                spouses.forEach(sp => {
+                    visited.add(sp.character_id);
+                    // Find children of primaryChar and this specific spouse
+                    const unionChildren = allCharactersList.filter(c => 
+                        (c.father_id === primaryChar.character_id && c.mother_id === sp.character_id) ||
+                        (c.mother_id === primaryChar.character_id && c.father_id === sp.character_id)
+                    );
+                    unionChildren.sort((a, b) => a.character_id - b.character_id);
+                    const hasUnionKids = unionChildren.length > 0;
+
+                    html += `<div class="tree-node ${hasUnionKids ? 'has-children' : ''} marriage-branch-node">`;
+                    html += `<div class="node-union marriage-spouse-union">`;
+                    html += `<div class="marriage-branch-header"><i class="fas fa-ring"></i> נישואין עם <strong>${primaryChar.main_name_he}</strong></div>`;
+                    html += renderCharCard(sp);
+                    if (hasUnionKids) {
+                        html += `<button class="branch-toggle" onclick="toggleBranch(event, this)" title="כווץ/הרחב ענף"><i class="fas fa-chevron-up"></i></button>`;
+                    }
+                    html += `</div>`; // end node-union for spouse
+
+                    if (hasUnionKids) {
+                        html += `<div class="tree-node-children">`;
+                        unionChildren.forEach(child => {
+                            html += renderTreeNode(child.character_id, charMap, visited);
+                        });
+                        html += `</div>`;
+                    }
+                    html += `</div>`; // end marriage-branch-node
+                });
+
+                // Any other children not attached to these spouses
+                const spouseIdsSet = new Set(spouses.map(s => s.character_id));
+                const otherChildren = primaryChar.childrenList
+                    .map(cid => charMap.get(cid))
+                    .filter(c => c && !spouseIdsSet.has(c.mother_id) && !spouseIdsSet.has(c.father_id) && !visited.has(c.character_id));
+                
+                otherChildren.forEach(child => {
+                    html += renderTreeNode(child.character_id, charMap, visited);
+                });
+
+                html += `</div>`; // end tree-node-children
+                html += `</div>`; // end tree-node
+                return html;
+            }
+
+            // SINGLE SPOUSE OR MONOGAMOUS CASE (e.g. Adam and Eve)
+            spouses.forEach(s => visited.add(s.character_id));
+
+            // Combined children of this union
+            const unionChildrenIds = new Set(primaryChar.childrenList);
+            spouses.forEach(s => {
+                s.childrenList.forEach(cid => unionChildrenIds.add(cid));
+            });
+
+            const children = Array.from(unionChildrenIds)
+                .map(cid => charMap.get(cid))
+                .filter(Boolean);
+
+            children.sort((a, b) => a.character_id - b.character_id);
+
+            const hasChildren = children.length > 0;
+
+            let html = `<div class="tree-node ${hasChildren ? 'has-children' : ''}" data-id="${primaryChar.character_id}">`;
+            
+            // Family union wrapper
+            html += `<div class="node-union">`;
+            html += renderCharCard(primaryChar);
+
+            spouses.forEach(sp => {
+                html += `<div class="marriage-ring" title="קשר נישואין"><i class="fas fa-ring"></i></div>`;
+                html += renderCharCard(sp);
+            });
+
+            if (hasChildren) {
+                html += `<button class="branch-toggle" onclick="toggleBranch(event, this)" title="כווץ/הרחב ענף"><i class="fas fa-chevron-up"></i></button>`;
+            }
+            html += `</div>`; // end node-union
+
+            // Children branches
+            if (hasChildren) {
+                html += `<div class="tree-node-children">`;
+                children.forEach(child => {
+                    html += renderTreeNode(child.character_id, charMap, visited);
+                });
+                html += `</div>`;
+            }
+
+            html += `</div>`;
+            return html;
+        }
+
+        function renderFamilyTree() {
+            const canvas = document.getElementById('treeCanvas');
+            const stats = document.getElementById('treeStats');
+            if (!canvas) return;
+
+            if (!allCharactersList || allCharactersList.length === 0) {
+                canvas.innerHTML = '<div style="padding: 3rem; color: var(--text-muted); font-size: 1.2rem;">אין דמויות להצגה בעץ</div>';
+                if (stats) stats.textContent = '';
+                return;
+            }
+
+            if (stats) {
+                stats.textContent = `${allCharactersList.length} דמויות במאגר`;
+            }
+
+            // Build map
+            const charMap = new Map();
+            allCharactersList.forEach(c => {
+                let sList = [];
+                if (c.spouse_ids) {
+                    sList = String(c.spouse_ids).split(',').map(s => parseInt(s.trim(), 10)).filter(n => !isNaN(n));
+                }
+                charMap.set(c.character_id, {
+                    ...c,
+                    spousesList: sList,
+                    childrenList: []
+                });
+            });
+
+            // Populate children
+            allCharactersList.forEach(c => {
+                if (c.father_id && charMap.has(c.father_id)) {
+                    const f = charMap.get(c.father_id);
+                    if (!f.childrenList.includes(c.character_id)) {
+                        f.childrenList.push(c.character_id);
+                    }
+                }
+                if (c.mother_id && charMap.has(c.mother_id)) {
+                    const m = charMap.get(c.mother_id);
+                    if (!m.childrenList.includes(c.character_id)) {
+                        m.childrenList.push(c.character_id);
+                    }
+                }
+            });
+
+            // Determine who has parents in tree
+            const hasParentsInTree = new Set();
+            allCharactersList.forEach(c => {
+                if ((c.father_id && charMap.has(c.father_id)) || (c.mother_id && charMap.has(c.mother_id))) {
+                    hasParentsInTree.add(c.character_id);
+                }
+            });
+
+            // Find Roots
+            const roots = [];
+            const assigned = new Set();
+            allCharactersList.forEach(c => {
+                const cid = c.character_id;
+                if (hasParentsInTree.has(cid)) return;
+                // If married to someone who already has parents in the tree, they appear with their spouse
+                const isMarriedToDescendant = charMap.get(cid).spousesList.some(spId => hasParentsInTree.has(spId));
+                if (isMarriedToDescendant) return;
+                if (assigned.has(cid)) return;
+
+                roots.push(cid);
+                assigned.add(cid);
+                charMap.get(cid).spousesList.forEach(spId => assigned.add(spId));
+            });
+
+            // Render all root lineages
+            const visited = new Set();
+            let treeHtml = '';
+            roots.forEach(rootId => {
+                treeHtml += renderTreeNode(rootId, charMap, visited);
+            });
+
+            // Fallback for any orphaned individuals not reached
+            allCharactersList.forEach(c => {
+                if (!visited.has(c.character_id)) {
+                    treeHtml += renderTreeNode(c.character_id, charMap, visited);
+                }
+            });
+
+            canvas.innerHTML = treeHtml;
+            applyTreeZoom();
+        }
+
+        // Initialize drag to pan and mouse wheel zoom
+        function initTreePan() {
+            const vp = document.getElementById('treeViewport');
+            if (!vp) return;
+
+            let isDown = false;
+            let startX = 0, startY = 0, scrollLeft = 0, scrollTop = 0;
+
+            vp.addEventListener('mousedown', (e) => {
+                if (e.target.closest('.tree-card') || e.target.closest('button')) return;
+                isDown = true;
+                vp.classList.add('grabbing');
+                startX = e.pageX - vp.offsetLeft;
+                startY = e.pageY - vp.offsetTop;
+                scrollLeft = vp.scrollLeft;
+                scrollTop = vp.scrollTop;
+            });
+
+            vp.addEventListener('mouseleave', () => {
+                isDown = false;
+                vp.classList.remove('grabbing');
+            });
+
+            vp.addEventListener('mouseup', () => {
+                isDown = false;
+                vp.classList.remove('grabbing');
+            });
+
+            vp.addEventListener('mousemove', (e) => {
+                if (!isDown) return;
+                e.preventDefault();
+                const x = e.pageX - vp.offsetLeft;
+                const y = e.pageY - vp.offsetTop;
+                const walkX = (x - startX) * 1.3;
+                const walkY = (y - startY) * 1.3;
+                vp.scrollLeft = scrollLeft - walkX;
+                vp.scrollTop = scrollTop - walkY;
+            });
+
+            vp.addEventListener('wheel', (e) => {
+                if (e.ctrlKey) {
+                    e.preventDefault();
+                    zoomTree(e.deltaY < 0 ? 0.08 : -0.08);
+                }
+            }, { passive: false });
+        }
+
         // Init
-        document.addEventListener('DOMContentLoaded', loadCharacters);
+        document.addEventListener('DOMContentLoaded', () => {
+            loadCharacters();
+            initTreePan();
+        });
     </script>
 </body>
 </html>
