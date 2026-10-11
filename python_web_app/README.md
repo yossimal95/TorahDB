@@ -47,3 +47,5 @@ To run the project locally, follow these steps:
 - `api/` - API endpoints and route handlers for frontend-backend communication.
 - `infrastructure/` - Data access layer and query execution functions.
 - `static/` - Frontend assets (HTML, CSS, JS).
+
+<img width="1326" height="717" alt="image" src="https://github.com/user-attachments/assets/f29d8bd7-592e-4b3a-b095-e020a1701718" />
