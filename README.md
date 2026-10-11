@@ -33,6 +33,7 @@ CREATE TABLE characters (
     character_id INTEGER PRIMARY KEY AUTOINCREMENT,
     main_name_he TEXT NOT NULL,
     main_name_en TEXT,  
+    gender INTEGER,
     father_id INTEGER,
     mother_id INTEGER,
     age_at_death INTEGER,
