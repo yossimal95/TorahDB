@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>מאגר דמויות תנ"ך</title>
-    <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
     <style>
         :root {
             --bg-color: #f4ebd0; /* Old parchment/paper */
@@ -30,7 +29,7 @@
         }
 
         body {
-            font-family: 'Frank Ruhl Libre', serif;
+            font-family: serif;
             background-color: var(--bg-color);
             color: var(--text-main);
             min-height: 100vh;
@@ -71,7 +70,7 @@
             border: 1px solid var(--border-dark);
             padding: 0.6rem 1.2rem;
             border-radius: 3px;
-            font-family: 'Frank Ruhl Libre', serif;
+            font-family: inherit;
             font-weight: 600;
             font-size: 1.1rem;
             cursor: pointer;
@@ -559,7 +558,7 @@
 
         .tree-card-header {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
             font-size: 0.8rem;
             color: var(--text-muted);
@@ -1375,7 +1374,6 @@
             const isMale = char.gender === 1 || char.gender === '1';
             const isFemale = char.gender === 0 || char.gender === '0';
             const genderClass = isMale ? 'male' : (isFemale ? 'female' : 'unknown');
-            const genderIcon = isMale ? '<i class="fas fa-mars" style="color: #2b5c8f;"></i>' : (isFemale ? '<i class="fas fa-venus" style="color: #8f2b5c;"></i>' : '');
             
             let metaText = '';
             if (char.age_at_death) {
@@ -1388,13 +1386,12 @@
             if (customTag) {
                 tagsHtml = `<div class="card-tag father-tag">${customTag}</div>`;
             } else if (char.mother_name) {
-                tagsHtml = `<div class="card-tag mother-tag"><i class="fas fa-female"></i> אם: ${char.mother_name}</div>`;
+                tagsHtml = `<div class="card-tag mother-tag">אם: ${char.mother_name}</div>`;
             }
 
             return `
                 <div class="tree-card ${genderClass}" onclick="openDetailsModalFromTree(${char.character_id})" title="לחץ לצפייה ועריכה מלאה">
                     <div class="tree-card-header">
-                        <span>${genderIcon}</span>
                         <span class="tree-card-meta">${metaText}</span>
                     </div>
                     <div class="tree-card-name">${char.main_name_he || 'ללא שם'}</div>
