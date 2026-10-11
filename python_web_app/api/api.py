@@ -11,6 +11,7 @@ def get_all_characters():
         c.character_id, 
         c.main_name_he, 
         c.main_name_en, 
+        c.gender,
         c.father_id, 
         c.mother_id, 
         c.age_at_death,
@@ -37,12 +38,13 @@ def get_all_characters():
 def add_character():
     data = request.json or {}
     query = """
-    INSERT INTO characters (main_name_he, main_name_en, father_id, mother_id, age_at_death)
-    VALUES (:main_name_he, :main_name_en, :father_id, :mother_id, :age_at_death);
+    INSERT INTO characters (main_name_he, main_name_en, gender, father_id, mother_id, age_at_death)
+    VALUES (:main_name_he, :main_name_en, :gender, :father_id, :mother_id, :age_at_death);
     """
     params = {
         "main_name_he": data.get("main_name_he"),
         "main_name_en": data.get("main_name_en"),
+        "gender": data.get("gender"),
         "father_id": data.get("father_id"),
         "mother_id": data.get("mother_id"),
         "age_at_death": data.get("age_at_death")
@@ -98,6 +100,7 @@ def update_character_details():
     UPDATE characters
     SET main_name_he = :main_name_he,
         main_name_en = :main_name_en,
+        gender = :gender,
         father_id = :father_id,
         mother_id = :mother_id,
         age_at_death = :age_at_death
@@ -107,6 +110,7 @@ def update_character_details():
         "character_id": data.get("character_id"),
         "main_name_he": data.get("main_name_he"),
         "main_name_en": data.get("main_name_en"),
+        "gender": data.get("gender"),
         "father_id": data.get("father_id"),
         "mother_id": data.get("mother_id"),
         "age_at_death": data.get("age_at_death")
@@ -212,7 +216,7 @@ def delete_character():
 def get_character_by_id():
     character_id = request.args.get('character_id')
     query = """
-    SELECT character_id, main_name_he, main_name_en, father_id, mother_id, age_at_death 
+    SELECT character_id, main_name_he, main_name_en, gender, father_id, mother_id, age_at_death 
     FROM characters
     WHERE character_id = :character_id;
     """
@@ -240,7 +244,7 @@ def get_character_aliases():
 def get_character_children():
     parent_id = request.args.get('parent_id')
     query = """
-    SELECT character_id, main_name_he, main_name_en, father_id, mother_id, age_at_death 
+    SELECT character_id, main_name_he, main_name_en, gender, father_id, mother_id, age_at_death 
     FROM characters
     WHERE father_id = :parent_id OR mother_id = :parent_id;
     """
