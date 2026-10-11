@@ -1,0 +1,125 @@
+
+# =========================
+# Python
+# =========================
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Compiled extensions
+*.so
+*.pyd
+*.dll
+
+# =========================
+# Virtual Environments
+# =========================
+venv/
+.venv/
+env/
+ENV/
+.conda/
+conda-env/
+
+# Conda
+.condarc
+conda-meta/
+
+# =========================
+# Python Packages
+# =========================
+pip-wheel-metadata/
+*.egg-info/
+.eggs/
+wheels/
+dist/
+build/
+site-packages/
+
+# =========================
+# Testing & Coverage
+# =========================
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.tox/
+.nox/
+.coverage
+.coverage.*
+htmlcov/
+.hypothesis/
+
+# =========================
+# IDEs & Editors
+# =========================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.spyproject/
+
+# =========================
+# Jupyter Notebook
+# =========================
+.ipynb_checkpoints/
+
+# =========================
+# Operating System
+# =========================
+.DS_Store
+Thumbs.db
+Desktop.ini
+ehthumbs.db
+Icon?
+$RECYCLE.BIN/
+
+# =========================
+# Logs & Temporary Files
+# =========================
+*.log
+logs/
+log/
+*.tmp
+*.temp
+*.bak
+*.old
+*.orig
+*.swp
+*.cache
+
+# =========================
+# Environment Variables & Secrets
+# =========================
+.env
+.env.*
+!.env.example
+
+# =========================
+# Debugging
+# =========================
+*.stackdump
+pip-log.txt
+pip-delete-this-directory.txt
+
+# =========================
+# Build & Packaging
+# =========================
+*.spec
+*.manifest
+*.exe
+*.msi
+
+# =========================
+# SQLite
+# =========================
+*.sqlite-shm
+*.sqlite-wal
+*.db-journal
+
+# =========================
+# Python Profiling
+# =========================
+.prof
+*.prof
+profile/
