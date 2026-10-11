@@ -1,5 +1,5 @@
 # TorahDB - Python Web Interface
-<img width="1223" height="226" alt="image" src="https://github.com/user-attachments/assets/24ca0eb8-bf9b-48dd-8eee-64b426e674a8" />
+<img width="1223" height="800" alt="image" src="https://github.com/user-attachments/assets/54ad7c0b-2615-4677-8eb6-e314d00afdb4" />
 
 This directory contains a complete implementation of the TorahDB project using **Python**, featuring an embedded database (SQLite) and an interactive web user interface.
 The project allows for easy management, browsing, and editing of data regarding Torah characters and their sources in a user-friendly way.
