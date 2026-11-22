@@ -9,17 +9,16 @@ def get_all_characters():
     query = """
     SELECT 
         c.character_id, 
-        c.main_name_he, 
-        c.main_name_en, 
+        c.main_name, 
         c.gender,
         c.father_id, 
         c.mother_id, 
         c.age_at_death,
-        f.main_name_he AS father_name,
-        m.main_name_he AS mother_name,
-        (SELECT GROUP_CONCAT(a.alias_name_he, ', ') FROM character_aliases a WHERE a.character_id = c.character_id) AS aliases,
-        (SELECT GROUP_CONCAT(child.main_name_he, ', ') FROM characters child WHERE child.father_id = c.character_id OR child.mother_id = c.character_id) AS children,
-        (SELECT GROUP_CONCAT(spouse.main_name_he, ', ') 
+        f.main_name AS father_name,
+        m.main_name AS mother_name,
+        (SELECT GROUP_CONCAT(a.alias_name, ', ') FROM character_aliases a WHERE a.character_id = c.character_id) AS aliases,
+        (SELECT GROUP_CONCAT(child.main_name, ', ') FROM characters child WHERE child.father_id = c.character_id OR child.mother_id = c.character_id) AS children,
+        (SELECT GROUP_CONCAT(spouse.main_name, ', ') 
          FROM marriages mar
          JOIN characters spouse ON (mar.husband_id = c.character_id AND spouse.character_id = mar.wife_id) 
                                 OR (mar.wife_id = c.character_id AND spouse.character_id = mar.husband_id)
@@ -42,12 +41,11 @@ def get_all_characters():
 def add_character():
     data = request.json or {}
     query = """
-    INSERT INTO characters (main_name_he, main_name_en, gender, father_id, mother_id, age_at_death)
-    VALUES (:main_name_he, :main_name_en, :gender, :father_id, :mother_id, :age_at_death);
+    INSERT INTO characters (main_name, gender, father_id, mother_id, age_at_death)
+    VALUES (:main_name, :gender, :father_id, :mother_id, :age_at_death);
     """
     params = {
-        "main_name_he": data.get("main_name_he"),
-        "main_name_en": data.get("main_name_en"),
+        "main_name": data.get("main_name"),
         "gender": data.get("gender"),
         "father_id": data.get("father_id"),
         "mother_id": data.get("mother_id"),
@@ -63,13 +61,12 @@ def add_character():
 def add_character_alias():
     data = request.json or {}
     query = """
-    INSERT INTO character_aliases (character_id, alias_name_he, alias_name_en)
-    VALUES (:character_id, :alias_name_he, :alias_name_en);
+    INSERT INTO character_aliases (character_id, alias_name)
+    VALUES (:character_id, :alias_name);
     """
     params = {
         "character_id": data.get("character_id"),
-        "alias_name_he": data.get("alias_name_he"),
-        "alias_name_en": data.get("alias_name_en")
+        "alias_name": data.get("alias_name")
     }
     result = DataAccess.execute_write(query, params)
     if isinstance(result, dict) and "error" in result:
@@ -82,14 +79,12 @@ def update_character_alias():
     data = request.json or {}
     query = """
     UPDATE character_aliases
-    SET alias_name_he = :alias_name_he,
-        alias_name_en = :alias_name_en
+    SET alias_name = :alias_name
     WHERE alias_id = :alias_id;
     """
     params = {
         "alias_id": data.get("alias_id"),
-        "alias_name_he": data.get("alias_name_he"),
-        "alias_name_en": data.get("alias_name_en")
+        "alias_name": data.get("alias_name")
     }
     result = DataAccess.execute_write(query, params)
     if isinstance(result, dict) and "error" in result:
@@ -102,8 +97,7 @@ def update_character_details():
     data = request.json or {}
     query = """
     UPDATE characters
-    SET main_name_he = :main_name_he,
-        main_name_en = :main_name_en,
+    SET main_name = :main_name,
         gender = :gender,
         father_id = :father_id,
         mother_id = :mother_id,
@@ -112,8 +106,7 @@ def update_character_details():
     """
     params = {
         "character_id": data.get("character_id"),
-        "main_name_he": data.get("main_name_he"),
-        "main_name_en": data.get("main_name_en"),
+        "main_name": data.get("main_name"),
         "gender": data.get("gender"),
         "father_id": data.get("father_id"),
         "mother_id": data.get("mother_id"),
@@ -150,7 +143,7 @@ def add_marriage():
         return jsonify(result), 500
     return jsonify({"success": True, "rows_affected": result})
 
-# 7. sp_update_marriage
+# 8. sp_update_marriage
 @api_bp.route('/marriages/update', methods=['POST'])
 def update_marriage():
     data = request.json or {}
@@ -170,7 +163,7 @@ def update_marriage():
         return jsonify(result), 500
     return jsonify({"success": True, "rows_affected": result})
 
-# 8. sp_delete_character_alias
+# 9. sp_delete_character_alias
 @api_bp.route('/aliases/delete', methods=['POST'])
 def delete_character_alias():
     data = request.json or {}
@@ -184,7 +177,7 @@ def delete_character_alias():
         return jsonify(result), 500
     return jsonify({"success": True, "rows_affected": result})
 
-# 9. sp_delete_marriage
+# 10. sp_delete_marriage
 @api_bp.route('/marriages/delete', methods=['POST'])
 def delete_marriage():
     data = request.json or {}
@@ -198,7 +191,7 @@ def delete_marriage():
         return jsonify(result), 500
     return jsonify({"success": True, "rows_affected": result})
 
-# 10. sp_delete_character
+# 11. sp_delete_character
 @api_bp.route('/characters/delete', methods=['POST'])
 def delete_character():
     data = request.json or {}
@@ -224,12 +217,12 @@ def delete_character():
         return jsonify(result), 500
     return jsonify({"success": True})
 
-# 11. sp_get_character_by_id
+# 12. sp_get_character_by_id
 @api_bp.route('/characters/get', methods=['GET'])
 def get_character_by_id():
     character_id = request.args.get('character_id')
     query = """
-    SELECT character_id, main_name_he, main_name_en, gender, father_id, mother_id, age_at_death 
+    SELECT character_id, main_name, gender, father_id, mother_id, age_at_death 
     FROM characters
     WHERE character_id = :character_id;
     """
@@ -238,12 +231,12 @@ def get_character_by_id():
         return jsonify(result), 500
     return jsonify(result)
 
-# 12. sp_get_character_aliases
+# 13. sp_get_character_aliases
 @api_bp.route('/characters/aliases', methods=['GET'])
 def get_character_aliases():
     character_id = request.args.get('character_id')
     query = """
-    SELECT alias_id, alias_name_he, alias_name_en
+    SELECT alias_id, alias_name
     FROM character_aliases
     WHERE character_id = :character_id;
     """
@@ -252,12 +245,12 @@ def get_character_aliases():
         return jsonify(result), 500
     return jsonify(result)
 
-# 13. sp_get_character_children
+# 14. sp_get_character_children
 @api_bp.route('/characters/children', methods=['GET'])
 def get_character_children():
     parent_id = request.args.get('parent_id')
     query = """
-    SELECT character_id, main_name_he, main_name_en, gender, father_id, mother_id, age_at_death 
+    SELECT character_id, main_name, gender, father_id, mother_id, age_at_death 
     FROM characters
     WHERE father_id = :parent_id OR mother_id = :parent_id;
     """
@@ -266,7 +259,7 @@ def get_character_children():
         return jsonify(result), 500
     return jsonify(result)
 
-# 14. sp_get_character_spouses
+# 15. sp_get_character_spouses
 @api_bp.route('/characters/spouses', methods=['GET'])
 def get_character_spouses():
     character_id = request.args.get('character_id')
@@ -274,8 +267,7 @@ def get_character_spouses():
     SELECT 
         m.marriage_id,
         CASE WHEN m.husband_id = :character_id THEN m.wife_id ELSE m.husband_id END AS spouse_id,
-        c.main_name_he AS spouse_name_he,
-        c.main_name_en AS spouse_name_en
+        c.main_name AS spouse_name
     FROM marriages m
     JOIN characters c ON c.character_id = (CASE WHEN m.husband_id = :character_id THEN m.wife_id ELSE m.husband_id END)
     WHERE m.husband_id = :character_id OR m.wife_id = :character_id;
