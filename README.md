@@ -5,7 +5,7 @@ The Torah Characters & Genealogy Database
 This project is a relational database for Torah characters, their family trees, and aliases, implemented using **SQLite**.
 
 ### Naming Conventions & Best Practices
-- **Tables and Columns**: We use `snake_case` (e.g., `characters`, `main_name_he`), which is the universally accepted standard and best practice for SQL databases. It improves readability and prevents syntax issues across different database engines.
+- **Tables and Columns**: We use `snake_case` (e.g., `characters`, `main_name`), which is the universally accepted standard and best practice for SQL databases. It improves readability and prevents syntax issues across different database engines.
 - **Hebrew Support**: SQLite natively stores text in UTF-8 encoding. Unlike SQL Server, there is no need for `NVARCHAR` or special collations (like `Hebrew_CI_AS`). You can store Hebrew characters directly in standard `TEXT` columns seamlessly.
 
 ---
@@ -31,8 +31,7 @@ PRAGMA foreign_keys = ON;
 ```sql
 CREATE TABLE characters (
     character_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    main_name_he TEXT NOT NULL,
-    main_name_en TEXT,  
+    main_name TEXT NOT NULL,
     gender INTEGER,
     father_id INTEGER,
     mother_id INTEGER,
@@ -45,8 +44,7 @@ CREATE TABLE characters (
 CREATE TABLE character_aliases (
     alias_id INTEGER PRIMARY KEY AUTOINCREMENT,
     character_id INTEGER NOT NULL,
-    alias_name_he TEXT NOT NULL, 
-    alias_name_en TEXT, 
+    alias_name TEXT NOT NULL, 
      
     CONSTRAINT fk_character_alias FOREIGN KEY (character_id) 
     REFERENCES characters(character_id) ON DELETE CASCADE
@@ -74,14 +72,14 @@ CREATE TABLE marriages (
 
 ```sql
 SELECT 
-    f.main_name_he,
+    f.main_name,
     COUNT(c.character_id) AS children_count,
-    GROUP_CONCAT(c.main_name_he, ', ') AS children_names
+    GROUP_CONCAT(c.main_name, ', ') AS children_names
 FROM characters AS c
 INNER JOIN characters AS f 
     ON f.character_id = c.father_id
-WHERE f.main_name_he = 'אדם'
-GROUP BY f.main_name_he;
+WHERE f.main_name = 'אדם'
+GROUP BY f.main_name;
 ```
 <img width="295" height="71" alt="image" src="https://github.com/user-attachments/assets/61365e9d-141f-43dd-b5ff-0e1d745b78e2" />
 
@@ -90,9 +88,9 @@ GROUP BY f.main_name_he;
 ```sql
 SELECT 
     c.character_id,
-    c.main_name_he AS child_name,
-    f.main_name_he AS father_name,
-    m.main_name_he AS mother_name
+    c.main_name AS child_name,
+    f.main_name AS father_name,
+    m.main_name AS mother_name
 FROM characters AS c
 LEFT JOIN characters AS f
     ON c.father_id = f.character_id
@@ -105,10 +103,8 @@ LEFT JOIN characters AS m
 
 ```sql
 SELECT 
-    h.main_name_he AS husband_he,
-    h.main_name_en AS husband_en,
-    w.main_name_he AS wife_he,
-    w.main_name_en AS wife_en
+    h.main_name AS husband_name,
+    w.main_name AS wife_name
 FROM marriages AS m
 JOIN characters AS h 
     ON m.husband_id = h.character_id 
