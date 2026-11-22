@@ -113,4 +113,4 @@ JOIN characters AS h
 JOIN characters AS w 
     ON m.wife_id = w.character_id;
 ```
-<img width="177" height="372" alt="image" src="https://github.com/user-attachments/assets/72076402-5781-4999-94db-909294cdf798" />
+<img width="181" height="368" alt="image" src="https://github.com/user-attachments/assets/873176c4-f10c-4edd-9036-6ba76752e6f0" />
