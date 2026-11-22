@@ -718,8 +718,7 @@
                 <thead>
                     <tr>
                         <th>מזהה</th>
-                        <th>שם עברי</th>
-                        <th>שם באנגלית</th>
+                        <th>שם הדמות</th>
                         <th>זכר/נקבה</th>
                         <th>גיל פטירה</th>
                         <th>אב</th>
@@ -755,15 +754,9 @@
                 <div class="tab-pane active" id="tab-personal">
                     <form id="editForm" onsubmit="handleEditSubmit(event)">
                         <input type="hidden" id="edit_char_id">
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>שם עברי (ראשי)</label>
-                                <input type="text" class="form-control" id="edit_name_he" required>
-                            </div>
-                            <div class="form-group">
-                                <label>שם באנגלית (ראשי)</label>
-                                <input type="text" class="form-control" id="edit_name_en">
-                            </div>
+                        <div class="form-group">
+                            <label>שם הדמות (ראשי)</label>
+                            <input type="text" class="form-control" id="edit_name" required>
                         </div>
                         <div class="form-row">
                             <div class="form-group">
@@ -808,12 +801,8 @@
                 <div class="tab-pane" id="tab-aliases">
                     <div class="add-mini-form">
                         <div class="form-group" style="margin: 0; flex: 1;">
-                            <label>שם עברי</label>
-                            <input type="text" class="form-control" id="new_alias_he">
-                        </div>
-                        <div class="form-group" style="margin: 0; flex: 1;">
-                            <label>שם באנגלית</label>
-                            <input type="text" class="form-control" id="new_alias_en">
+                            <label>שם נוסף / כינוי</label>
+                            <input type="text" class="form-control" id="new_alias_name" placeholder="הזן כינוי או שם נוסף...">
                         </div>
                         <button class="btn" onclick="addAlias()">הוסף</button>
                     </div>
@@ -874,12 +863,8 @@
             <div class="modal-body">
                 <form id="addForm" onsubmit="handleAddSubmit(event)">
                     <div class="form-group">
-                        <label>שם עברי (ראשי)</label>
-                        <input type="text" class="form-control" id="add_name_he" required>
-                    </div>
-                    <div class="form-group">
-                        <label>שם באנגלית (ראשי)</label>
-                        <input type="text" class="form-control" id="add_name_en">
+                        <label>שם הדמות (ראשי)</label>
+                        <input type="text" class="form-control" id="add_name" required>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
@@ -989,8 +974,7 @@
                 tr.onclick = () => openDetailsModal(char);
                 tr.innerHTML = `
                     <td>${char.character_id}</td>
-                    <td><strong>${char.main_name_he || '-'}</strong></td>
-                    <td>${char.main_name_en || '-'}</td>
+                    <td><strong>${char.main_name || '-'}</strong></td>
                     <td>${formatGender(char.gender)}</td>
                     <td>${char.age_at_death || '-'}</td>
                     <td>${char.father_name || '-'}</td>
@@ -1018,7 +1002,7 @@
                 if (c.character_id !== excludeId) {
                     const option = document.createElement('option');
                     option.value = c.character_id;
-                    const name = c.main_name_he ? c.main_name_he : 'ללא שם';
+                    const name = c.main_name ? c.main_name : 'ללא שם';
                     option.textContent = `${name} (ID: ${c.character_id})`;
                     if (selectedId && c.character_id == selectedId) {
                         option.selected = true;
@@ -1059,8 +1043,7 @@
             e.preventDefault();
             const genderVal = document.getElementById('add_gender').value;
             const payload = {
-                main_name_he: document.getElementById('add_name_he').value,
-                main_name_en: document.getElementById('add_name_en').value || null,
+                main_name: document.getElementById('add_name').value,
                 gender: genderVal !== "" ? parseInt(genderVal, 10) : null,
                 father_id: document.getElementById('add_father_id').value || null,
                 mother_id: document.getElementById('add_mother_id').value || null,
@@ -1080,8 +1063,7 @@
             
             // Populate personal details form
             document.getElementById('edit_char_id').value = char.character_id;
-            document.getElementById('edit_name_he').value = char.main_name_he || '';
-            document.getElementById('edit_name_en').value = char.main_name_en || '';
+            document.getElementById('edit_name').value = char.main_name || '';
             document.getElementById('edit_gender').value = (char.gender !== null && char.gender !== undefined) ? char.gender : '';
             document.getElementById('edit_age').value = char.age_at_death || '';
             
@@ -1105,8 +1087,7 @@
             const genderVal = document.getElementById('edit_gender').value;
             const payload = {
                 character_id: document.getElementById('edit_char_id').value,
-                main_name_he: document.getElementById('edit_name_he').value,
-                main_name_en: document.getElementById('edit_name_en').value || null,
+                main_name: document.getElementById('edit_name').value,
                 gender: genderVal !== "" ? parseInt(genderVal, 10) : null,
                 father_id: document.getElementById('edit_father_id').value || null,
                 mother_id: document.getElementById('edit_mother_id').value || null,
@@ -1149,8 +1130,7 @@
                 div.className = 'list-item';
                 div.innerHTML = `
                     <div class="list-item-content">
-                        <strong>${alias.alias_name_he}</strong>
-                        <span style="font-size:0.9rem; color:var(--text-muted)">${alias.alias_name_en || ''}</span>
+                        <strong>${alias.alias_name}</strong>
                     </div>
                     <button class="icon-btn" onclick="deleteAlias(${alias.alias_id})" title="מחק"><i class="fas fa-trash"></i></button>
                 `;
@@ -1159,27 +1139,28 @@
         }
 
         async function addAlias() {
-            const he = document.getElementById('new_alias_he').value;
-            const en = document.getElementById('new_alias_en').value;
-            if(!he) return alert('חובה להזין שם עברי');
+            const name = document.getElementById('new_alias_name').value.trim();
+            if(!name) return alert('חובה להזין שם נוסף');
             
             const res = await apiCall('/api/aliases/add', 'POST', {
                 character_id: currentCharacterId,
-                alias_name_he: he,
-                alias_name_en: en || null
+                alias_name: name
             });
             
             if(res && res.success) {
-                document.getElementById('new_alias_he').value = '';
-                document.getElementById('new_alias_en').value = '';
+                document.getElementById('new_alias_name').value = '';
                 loadAliases();
+                loadCharacters();
             }
         }
 
         async function deleteAlias(aliasId) {
-            if(!confirm('למחק שם נוסף זה?')) return;
+            if(!confirm('למחוק שם נוסף זה?')) return;
             const res = await apiCall('/api/aliases/delete', 'POST', { alias_id: aliasId });
-            if(res && res.success) loadAliases();
+            if(res && res.success) {
+                loadAliases();
+                loadCharacters();
+            }
         }
 
         // -- Spouses --
@@ -1200,7 +1181,7 @@
                 div.className = 'list-item';
                 div.innerHTML = `
                     <div class="list-item-content">
-                        <strong>${spouse.spouse_name_he}</strong> (ID: ${spouse.spouse_id})
+                        <strong>${spouse.spouse_name}</strong> (ID: ${spouse.spouse_id})
                     </div>
                     <button class="icon-btn" onclick="deleteMarriage(${spouse.marriage_id})" title="הסר קשר נישואין"><i class="fas fa-trash"></i></button>
                 `;
@@ -1248,7 +1229,7 @@
                 div.className = 'list-item';
                 div.innerHTML = `
                     <div class="list-item-content">
-                        <strong>${child.main_name_he}</strong> (ID: ${child.character_id})
+                        <strong>${child.main_name}</strong> (ID: ${child.character_id})
                     </div>
                     <button class="btn" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;" onclick="openDetailsForChild(${child.character_id})">צפה בפרטים</button>
                 `;
@@ -1266,8 +1247,7 @@
 
             const payload = {
                 character_id: child.character_id,
-                main_name_he: child.main_name_he,
-                main_name_en: child.main_name_en || null,
+                main_name: child.main_name,
                 gender: child.gender !== undefined ? child.gender : null,
                 father_id: role === 'father' ? currentCharacterId : (child.father_id || null),
                 mother_id: role === 'mother' ? currentCharacterId : (child.mother_id || null),
@@ -1394,8 +1374,7 @@
                     <div class="tree-card-header">
                         <span class="tree-card-meta">${metaText}</span>
                     </div>
-                    <div class="tree-card-name">${char.main_name_he || 'ללא שם'}</div>
-                    <div class="tree-card-en">${char.main_name_en || ''}</div>
+                    <div class="tree-card-name">${char.main_name || 'ללא שם'}</div>
                     ${tagsHtml}
                 </div>
             `;
@@ -1438,7 +1417,7 @@
 
                     html += `<div class="tree-node ${hasUnionKids ? 'has-children' : ''} marriage-branch-node">`;
                     html += `<div class="node-union marriage-spouse-union">`;
-                    html += `<div class="marriage-branch-header"><i class="fas fa-ring"></i> נישואין עם <strong>${primaryChar.main_name_he}</strong></div>`;
+                    html += `<div class="marriage-branch-header"><i class="fas fa-ring"></i> נישואין עם <strong>${primaryChar.main_name}</strong></div>`;
                     html += renderCharCard(sp);
                     if (hasUnionKids) {
                         html += `<button class="branch-toggle" onclick="toggleBranch(event, this)" title="כווץ/הרחב ענף"><i class="fas fa-chevron-up"></i></button>`;
