@@ -81,7 +81,7 @@ INNER JOIN characters AS f
 WHERE f.main_name = 'אדם'
 GROUP BY f.main_name;
 ```
-<img width="295" height="71" alt="image" src="https://github.com/user-attachments/assets/61365e9d-141f-43dd-b5ff-0e1d745b78e2" />
+<img width="291" height="66" alt="image" src="https://github.com/user-attachments/assets/cc5b0ac7-a674-469c-945d-3765b135a9b5" />
 
 ### ⭐ Returns characters with parents’ names
 
@@ -97,7 +97,7 @@ LEFT JOIN characters AS f
 LEFT JOIN characters AS m
     ON c.mother_id = m.character_id;
 ```
-<img width="332" height="142" alt="image" src="https://github.com/user-attachments/assets/3bd5ab1d-543a-45e9-af62-11b7ea3bd261" />
+<img width="330" height="450" alt="image" src="https://github.com/user-attachments/assets/c898bd9b-f177-4685-ba73-ba5ff9765c70" />
 
 ### ⭐ Returns husbands and wives names
 
@@ -111,4 +111,4 @@ JOIN characters AS h
 JOIN characters AS w 
     ON m.wife_id = w.character_id;
 ```
-<img width="288" height="67" alt="image" src="https://github.com/user-attachments/assets/d98b05dc-1ad7-4f52-aefb-79a303ca5ec2" />
+<img width="177" height="372" alt="image" src="https://github.com/user-attachments/assets/72076402-5781-4999-94db-909294cdf798" />
