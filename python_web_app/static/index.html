@@ -94,6 +94,115 @@
             background-color: var(--danger-hover);
         }
 
+        /* Search Toolbar */
+        .search-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            background-color: var(--panel-bg);
+            border: 2px solid var(--border-dark);
+            border-radius: 4px;
+            padding: 0.85rem 1.2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+        }
+
+        .search-box-wrapper {
+            position: relative;
+            flex: 1;
+            max-width: 650px;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-box-wrapper .search-icon {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 1.15rem;
+            pointer-events: none;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.65rem 2.8rem 0.65rem 2.6rem;
+            background-color: #fdfaf3;
+            border: 1px solid var(--border-dark);
+            border-radius: 3px;
+            font-family: inherit;
+            font-size: 1.1rem;
+            color: var(--text-main);
+            box-shadow: inset 1px 1px 3px rgba(0,0,0,0.06);
+            transition: all 0.2s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--accent-1);
+            box-shadow: inset 1px 1px 3px rgba(0,0,0,0.1), 0 0 4px rgba(124, 45, 35, 0.4);
+            background-color: #ffffff;
+        }
+
+        .search-input::placeholder {
+            color: #8c7b6d;
+            font-style: italic;
+        }
+
+        .clear-search-btn {
+            position: absolute;
+            left: 0.8rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 1.15rem;
+            padding: 0.25rem;
+            line-height: 1;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.2s, background-color 0.2s;
+        }
+
+        .clear-search-btn:hover {
+            color: var(--accent-1);
+            background-color: rgba(124, 45, 35, 0.1);
+        }
+
+        .search-stats {
+            font-size: 1.05rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            white-space: nowrap;
+            background: #ede2cf;
+            padding: 0.45rem 1rem;
+            border-radius: 14px;
+            border: 1px solid var(--border-light);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .search-toolbar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .search-box-wrapper {
+                max-width: 100%;
+            }
+            .search-stats {
+                text-align: center;
+                justify-content: center;
+            }
+        }
+
         .table-container {
             background-color: var(--panel-bg);
             border: 2px solid var(--border-dark);
@@ -713,6 +822,29 @@
             </div>
         </header>
 
+        <!-- Search and Filter Toolbar -->
+        <div class="search-toolbar">
+            <div class="search-box-wrapper">
+                <i class="fas fa-search search-icon"></i>
+                <input 
+                    type="text" 
+                    id="characterSearchInput" 
+                    class="search-input" 
+                    placeholder="חיפוש דמות (לפי שם, שמות נוספים, אב, אם, בן/בת זוג, ילדים, גיל או מזהה)..." 
+                    oninput="renderCharactersTable()"
+                    onkeydown="if(event.key === 'Escape') clearSearch()"
+                    autocomplete="off"
+                    aria-label="חיפוש דמויות"
+                >
+                <button id="clearSearchBtn" class="clear-search-btn" onclick="clearSearch()" title="נקה חיפוש" style="display: none;">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="search-stats" id="searchStats">
+                טוען נתונים...
+            </div>
+        </div>
+
         <div class="table-container">
             <table id="charactersTable">
                 <thead>
@@ -959,17 +1091,90 @@
             }
         }
 
-        // Load all characters on start
-        async function loadCharacters() {
-            const data = await apiCall('/api/characters');
-            if (!data) return;
-            
-            allCharactersList = data; // Store globally for dropdowns
-            
+        function normalizeSearchText(text) {
+            if (text === null || text === undefined) return '';
+            return String(text)
+                .replace(/[\u0591-\u05C7]/g, '')
+                .toLowerCase()
+                .trim();
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        function clearSearch() {
+            const input = document.getElementById('characterSearchInput');
+            if (input) {
+                input.value = '';
+                input.focus();
+            }
+            renderCharactersTable();
+        }
+
+        function renderCharactersTable() {
+            const input = document.getElementById('characterSearchInput');
+            const rawQuery = input ? input.value : '';
+            const clearBtn = document.getElementById('clearSearchBtn');
+            const statsEl = document.getElementById('searchStats');
+
+            if (clearBtn) {
+                clearBtn.style.display = rawQuery.trim() ? 'flex' : 'none';
+            }
+
+            const words = rawQuery.trim().split(/\s+/).map(normalizeSearchText).filter(w => w.length > 0);
+
+            const filtered = allCharactersList.filter(char => {
+                if (words.length === 0) return true;
+                const genderText = (char.gender === 1 || char.gender === '1') ? 'זכר' : ((char.gender === 0 || char.gender === '0') ? 'נקבה' : '');
+                const searchableString = [
+                    char.character_id,
+                    char.main_name,
+                    genderText,
+                    char.age_at_death,
+                    char.father_name,
+                    char.mother_name,
+                    char.spouses,
+                    char.aliases,
+                    char.children
+                ].filter(Boolean).map(normalizeSearchText).join(' ');
+
+                return words.every(word => searchableString.includes(word));
+            });
+
+            if (statsEl) {
+                if (words.length > 0) {
+                    statsEl.innerHTML = `<i class="fas fa-filter"></i> נמצאו <strong>${filtered.length}</strong> מתוך ${allCharactersList.length} דמויות`;
+                } else {
+                    statsEl.innerHTML = `<i class="fas fa-users"></i> סה"כ <strong>${allCharactersList.length}</strong> דמויות`;
+                }
+            }
+
             const tbody = document.querySelector('#charactersTable tbody');
+            if (!tbody) return;
             tbody.innerHTML = '';
-            
-            data.forEach(char => {
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="9" style="text-align: center; padding: 2.5rem 1rem; color: var(--text-muted);">
+                            <i class="fas fa-search" style="font-size: 2.2rem; margin-bottom: 0.8rem; display: block; opacity: 0.4;"></i>
+                            <div style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.4rem;">לא נמצאו דמויות התואמות את החיפוש "${escapeHtml(rawQuery.trim())}"</div>
+                            <div style="font-size: 1rem; margin-bottom: 1rem;">נסה לחפש לפי שם אחר, כינוי, או קרוב משפחה</div>
+                            <button class="btn" style="padding: 0.4rem 1rem; font-size: 0.95rem;" onclick="clearSearch()">נקה חיפוש</button>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            filtered.forEach(char => {
                 const tr = document.createElement('tr');
                 tr.onclick = () => openDetailsModal(char);
                 tr.innerHTML = `
@@ -985,6 +1190,16 @@
                 `;
                 tbody.appendChild(tr);
             });
+        }
+
+        // Load all characters on start
+        async function loadCharacters() {
+            const data = await apiCall('/api/characters');
+            if (!data) return;
+            
+            allCharactersList = data; // Store globally for dropdowns
+            
+            renderCharactersTable();
 
             // If tree modal is open, refresh it as well
             const treeModal = document.getElementById('treeModal');
@@ -1633,6 +1848,22 @@
         document.addEventListener('DOMContentLoaded', () => {
             loadCharacters();
             initTreePan();
+
+            // Keyboard shortcut to quickly focus search input (/ or Ctrl+K)
+            document.addEventListener('keydown', (e) => {
+                const activeEl = document.activeElement;
+                const isEditing = activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA' || activeEl.isContentEditable);
+                const activeModal = document.querySelector('.modal-overlay.active');
+                
+                if (!activeModal && !isEditing && (e.key === '/' || ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k'))) {
+                    e.preventDefault();
+                    const searchInput = document.getElementById('characterSearchInput');
+                    if (searchInput) {
+                        searchInput.focus();
+                        searchInput.select();
+                    }
+                }
+            });
         });
     </script>
 </body>
